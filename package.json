@@ -1,0 +1,22 @@
+{
+  "name": "simple-form-builder",
+  "version": "1.0.0",
+  "description": "A simple form builder based on React Hook form and Bootstrap components.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "react",
+    "form",
+    "builder",
+    "bootstrap"
+  ],
+  "author": "Yvan SANSON",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^18.0.26",
+    "react": "^18.2.0",
+    "typescript": "^4.9.4"
+  }
+}
