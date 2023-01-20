@@ -1,8 +1,8 @@
 import React from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import Spinner from "react-bootstrap/Spinner";
+import type { UseFormRegisterReturn } from "react-hook-form";
 
 export interface SelectOption {
     /**

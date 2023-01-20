@@ -1,2 +1,2 @@
-export { default } from "./Select.component";
+export { default, SelectOption } from "./Select.component";
 
