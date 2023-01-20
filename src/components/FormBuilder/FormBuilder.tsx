@@ -172,55 +172,55 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
                             <input type="hidden" {...register("id")} />
                             <Row className="mb-3">
                                 <Form.Group controlId="field-name">
-                                    <Form.Label>Nom du champ</Form.Label>
+                                    <Form.Label>Field name</Form.Label>
                                     <Form.Control
                                         isInvalid={!!errors.name}
                                         defaultValue={editFormData?.name}
                                         disabled={editId !== ""}
                                         {...register("name", { required: true, validate: { validateInputName } })}
                                     />
-                                    <Form.Text>Le nom du champ, égal au nom de la variable Terraform.</Form.Text>
+                                    <Form.Text>The field name, which will be sent in the response data.</Form.Text>
                                     <Form.Control.Feedback type="invalid">
-                                        {errors.name?.type === "validateInputName" && "Ce nom est déjà pris."}
-                                        {errors.name?.type === "required" && "Ce champ est requis."}
+                                        {errors.name?.type === "validateInputName" && "This name is already in use."}
+                                        {errors.name?.type === "required" && "This field is required."}
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Row>
                             <Row className="mb-3">
                                 <Form.Group>
                                     <Select
-                                        label="Type de champ"
+                                        label="Field type"
                                         id="field-type"
                                         isInvalid={!!errors.type}
                                         options={fieldTypesOptions}
                                         {...register("type", { required: true })}
                                     />
-                                    <Form.Control.Feedback type="invalid">Ce champ est requis</Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid">This field is required.</Form.Control.Feedback>
                                 </Form.Group>
                             </Row>
                             <Row className="mb-3">
                                 <Form.Group controlId="field-label">
-                                    <Form.Label>Label du champ</Form.Label>
+                                    <Form.Label>Field label</Form.Label>
                                     <Form.Control {...register("label")} />
-                                    <Form.Text>Si vide, le nom du champ sera utilisé.</Form.Text>
+                                    <Form.Text>If empty, the field name will be used.</Form.Text>
                                 </Form.Group>
                             </Row>
                             <Row className="mb-3">
                                 <Form.Group controlId="field-default-value">
-                                    <Form.Label>Valeur par défaut</Form.Label>
+                                    <Form.Label>Default value</Form.Label>
                                     <Form.Control disabled={type.includes("header")} defaultValue={editFormData?.defaultValue} {...register("defaultValue")} />
                                 </Form.Group>
                             </Row>
                             {type === "select" && (
                                 <Row className="mb-3">
                                     <Form.Group controlId="field-options">
-                                        <Form.Label>Options du sélect</Form.Label>
+                                        <Form.Label>Select options</Form.Label>
                                         <Form.Control
                                             defaultValue={editFormData?.options}
                                             isInvalid={!!errors.options}
                                             {...register("options", { required: type === "select" })}
                                         />
-                                        <Form.Text>Séparez les options par des points virgules (;)</Form.Text>
+                                        <Form.Text>Separate values with ;</Form.Text>
                                     </Form.Group>
                                 </Row>
                             )}
@@ -250,7 +250,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
                             <Row>
                                 <Col>
                                     <Button variant="outline-success" type="submit">
-                                        Enregistrer
+                                       Save 
                                     </Button>
                                 </Col>
                             </Row>
