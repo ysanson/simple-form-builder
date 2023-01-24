@@ -7,6 +7,6 @@ By using a form definition describing inputs, users can create, store and genera
 
 ## Dependencies
 
-This library is based on the fantastic (react-hook-form)[https://react-hook-form.com] library for validations and input management.
+This library is based on the fantastic [react-hook-form](https://react-hook-form.com) library for validations and input management.
 
-For the input list, we use the (react-sortablejs)[https://github.com/SortableJS/react-sortablejs] library.
+For the input list, we use the [react-sortablejs](https://github.com/SortableJS/react-sortablejs) library.
