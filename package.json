@@ -34,6 +34,13 @@
     "typescript-eslint": "^0.0.1-alpha.0",
     "uuid": "^9.0.0"
   },
+  "peerDependencies": {
+    "bootstrap": "x",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.7.0",
+    "react-hook-form": "^7.42.1",
+
+  },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "files": [
