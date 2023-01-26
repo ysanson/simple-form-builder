@@ -82,3 +82,12 @@ const FormUserPage = () => {
     </>
   }
 ```
+
+## Roamap
+
+- Add tests
+- Add more documentation
+- Improve the creation of Select component
+- Better locale handling
+- Improve performance
+- Add more validation options
