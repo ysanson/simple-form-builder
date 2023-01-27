@@ -17,7 +17,7 @@ The UI is based on Bootstrap, and the [react-bootstrap](https://react-bootstrap.
 
 ### Installation
 
-Download and install it with `npm i @ysanson/simple-form-builder`. 
+Download and install it with `npm i @ysanson/simple-form-builder`. The package manager is Github packages, you may need to update your npm rc. For more information, please refer to the [official documentation](https://docs.github.com/en/packages/learn-github-packages/installing-a-package). 
 
 ### Using the components
 
