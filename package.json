@@ -1,9 +1,9 @@
 {
   "name": "simple-form-builder",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A simple form builder based on React Hook form and Bootstrap components.",
-  "main": "index.js",
   "scripts": {
+    "rollup": "rollup -c",
     "test": "test"
   },
   "keywords": [
@@ -15,6 +15,9 @@
   "author": "Yvan SANSON",
   "license": "ISC",
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
     "@types/react": "^18.0.26",
     "@types/uuid": "^9.0.0",
     "eslint": "^8.32.0",
@@ -23,8 +26,27 @@
     "react-bootstrap": "^2.7.0",
     "react-hook-form": "^7.42.1",
     "react-sortablejs": "^6.1.4",
+    "rollup": "^3.10.1",
+    "rollup-plugin-dts": "^5.1.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "tslib": "^2.4.1",
     "typescript": "^4.9.4",
     "typescript-eslint": "^0.0.1-alpha.0",
     "uuid": "^9.0.0"
+  },
+  "peerDependencies": {
+    "bootstrap": "x",
+    "react": "x",
+    "react-bootstrap": "^2.7.0",
+    "react-hook-form": "^7.42.1"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@rollup/plugin-terser": "^0.4.0"
   }
 }

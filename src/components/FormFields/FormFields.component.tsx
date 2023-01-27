@@ -117,6 +117,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
                                 <Form.Label>{getLabel(input)}</Form.Label>
                                 <Form.Control
                                     as="textarea"
+                                    rows={3}
                                     isInvalid={!!errors[input.name]}
                                     defaultValue={input.defaultValue}
                                     {...register(input.name, { required: input.required })}

@@ -16,11 +16,11 @@ interface FormGeneratorProps {
     /**
      * If true, hides the submit button (must then pass the prop `triggerSubmit`).
      */
-    hideSubmit: boolean;
+    hideSubmit?: boolean;
     /**
      * Triggers a submit externally.
      */
-    triggerSubmit: boolean;
+    triggerSubmit?: boolean;
     /**
      * Custom label for the submit button.
      */
@@ -49,8 +49,8 @@ interface FormGeneratorProps {
 
 const FormGenerator: React.FC<FormGeneratorProps> = ({
     formDefinition,
-    hideSubmit,
-    triggerSubmit,
+    hideSubmit = false,
+    triggerSubmit = false,
     submitBtnLabel,
     resetBtnLabel,
     isLoading,
@@ -76,7 +76,7 @@ const FormGenerator: React.FC<FormGeneratorProps> = ({
                 }
             )();
         }
-    }, [handleSubmit, onSubmitError, onSubmitSuccess, triggerSubmit]);
+    },[handleSubmit, onSubmitError, onSubmitSuccess, triggerSubmit]);
 
     return (
         <Container>
