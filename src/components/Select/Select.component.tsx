@@ -47,42 +47,42 @@ interface SelectProps {
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps & UseFormRegisterReturn>(
-    ({ label, options, defaultOption = "Choose...", id, describedBy, name, isInvalid, isLoading = false, onChange, onBlur, required, disabled }, ref) => {
-        return (
-            <>
-                <Form.Label htmlFor={id} id={`${id}Label`}>
-                    {label}
-                </Form.Label>
-                <Stack direction="horizontal" gap={3}>
-                    <Form.Select
-                        id={id}
-                        name={name}
-                        aria-describedby={describedBy}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        ref={ref}
-                        isInvalid={isInvalid}
-                        required={required}
-                        disabled={disabled}
-                    >
-                        <option value="" disabled>
-                            {defaultOption}
-                        </option>
-                        {options.map((option, i) => (
-                            <option key={i} value={option.value}>
-                                {option.label !== "" ? option.label : option.value}
-                            </option>
-                        ))}
-                    </Form.Select>
-                    {isLoading && (
-                        <Spinner animation="border" variant="secondary">
-                            <span className="visually-hidden">Loading options...</span>
-                        </Spinner>
-                    )}
-                </Stack>
-            </>
-        );
-    }
+  ({ label, options, defaultOption = "Choose...", id, describedBy, name, isInvalid, isLoading = false, onChange, onBlur, required, disabled }, ref) => {
+    return (
+      <>
+        <Form.Label htmlFor={id} id={`${id}Label`}>
+          {label}
+        </Form.Label>
+        <Stack direction="horizontal" gap={3}>
+          <Form.Select
+            id={id}
+            name={name}
+            aria-describedby={describedBy}
+            onChange={onChange}
+            onBlur={onBlur}
+            ref={ref}
+            isInvalid={isInvalid}
+            required={required}
+            disabled={disabled}
+          >
+            <option value="" disabled>
+              {defaultOption}
+            </option>
+            {options.map((option, i) => (
+              <option key={i} value={option.value}>
+                {option.label !== "" ? option.label : option.value}
+              </option>
+            ))}
+          </Form.Select>
+          {isLoading && (
+            <Spinner animation="border" variant="secondary">
+              <span className="visually-hidden">Loading options...</span>
+            </Spinner>
+          )}
+        </Stack>
+      </>
+    );
+  }
 );
 
 Select.displayName = "Select";

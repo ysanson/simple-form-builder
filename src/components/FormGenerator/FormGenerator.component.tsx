@@ -48,71 +48,71 @@ interface FormGeneratorProps {
 }
 
 const FormGenerator: React.FC<FormGeneratorProps> = ({
-    formDefinition,
-    hideSubmit = false,
-    triggerSubmit = false,
-    submitBtnLabel,
-    resetBtnLabel,
-    isLoading,
-    onSubmitError,
-    onSubmitSuccess,
+  formDefinition,
+  hideSubmit = false,
+  triggerSubmit = false,
+  submitBtnLabel,
+  resetBtnLabel,
+  isLoading,
+  onSubmitError,
+  onSubmitSuccess,
 }) => {
-    const {
-        register,
-        formState: { errors },
-        reset,
-        handleSubmit,
-    } = useForm();
+  const {
+    register,
+    formState: { errors },
+    reset,
+    handleSubmit,
+  } = useForm();
 
-    /**
+  /**
      * UseEffect for external submit
      */
-    useEffect(() => {
-        if (triggerSubmit) {
-            handleSubmit(
-                (data) => onSubmitSuccess(data),
-                (errs) => {
-                    if (onSubmitError) onSubmitError(errs);
-                }
-            )();
+  useEffect(() => {
+    if (triggerSubmit) {
+      handleSubmit(
+        (data) => onSubmitSuccess(data),
+        (errs) => {
+          if (onSubmitError) onSubmitError(errs);
         }
-    },[handleSubmit, onSubmitError, onSubmitSuccess, triggerSubmit]);
+      )();
+    }
+  },[handleSubmit, onSubmitError, onSubmitSuccess, triggerSubmit]);
 
-    return (
-        <Container>
-            <Form
-                noValidate
-                onSubmit={handleSubmit(
-                    (data) => onSubmitSuccess(data),
-                    (errs) => {
-                        if (onSubmitError) onSubmitError(errs);
-                    }
-                )}
-            >
-                <Row>
-                    <FormFields fields={formDefinition} register={register} errors={errors} />
-                </Row>
-                <Row>
-                    <div className="d-flex justify-content-around">
-                        <Button type="reset" variant="danger" onClick={() => reset()}>
-                            {resetBtnLabel ?? "Réinitialiser"}
-                        </Button>
-                        {!hideSubmit && (
-                            <Button type="submit" variant="success" disabled={isLoading}>
-                                {isLoading && (
-                                    <>
-                                        <Spinner as="span" size="sm" animation="border" role="status" aria-hidden />
+  return (
+    <Container>
+      <Form
+        noValidate
+        onSubmit={handleSubmit(
+          (data) => onSubmitSuccess(data),
+          (errs) => {
+            if (onSubmitError) onSubmitError(errs);
+          }
+        )}
+      >
+        <Row>
+          <FormFields fields={formDefinition} register={register} errors={errors} />
+        </Row>
+        <Row>
+          <div className="d-flex justify-content-around">
+            <Button type="reset" variant="danger" onClick={() => reset()}>
+              {resetBtnLabel ?? "Réinitialiser"}
+            </Button>
+            {!hideSubmit && (
+              <Button type="submit" variant="success" disabled={isLoading}>
+                {isLoading && (
+                  <>
+                    <Spinner as="span" size="sm" animation="border" role="status" aria-hidden />
                                         &nbsp;&nbsp;
-                                    </>
-                                )}
-                                {submitBtnLabel ?? "Envoyer"}
-                            </Button>
-                        )}
-                    </div>
-                </Row>
-            </Form>
-        </Container>
-    );
+                  </>
+                )}
+                {submitBtnLabel ?? "Envoyer"}
+              </Button>
+            )}
+          </div>
+        </Row>
+      </Form>
+    </Container>
+  );
 };
 
 export default FormGenerator;
