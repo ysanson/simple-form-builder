@@ -5,7 +5,7 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended"
   ],
-  "plugins": ["@typescript-eslint", "react-hooks", "prettier", "jsdoc"],
+  "plugins": ["@typescript-eslint", "react-hooks", "prettier"],
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
@@ -24,6 +24,7 @@
     "no-undef": 0,
     "no-unused-vars": "off",
     "react/prop-types": 0,
+    "indent": [1, 2],
     "@typescript-eslint/camelcase": 0,
     "@typescript-eslint/no-unused-vars": 1,
     "@typescript-eslint/no-use-before-define": 0,
@@ -35,9 +36,7 @@
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-non-null-assertion": "off",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "jsdoc/check-line-alignment": 2,
-    "jsdoc/require-param-type": 0
+    "react-hooks/exhaustive-deps": "warn"
   },
   "settings": {
     "react": {

@@ -4,7 +4,9 @@
   "description": "A simple form builder based on React Hook form and Bootstrap components.",
   "scripts": {
     "rollup": "rollup -c",
-    "test": "test"
+    "test": "test",
+    "lint": "eslint --cache src/",
+    "lint:fix": "eslint --fix src/"
   },
   "keywords": [
     "react",
@@ -21,8 +23,11 @@
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/react": "^18.0.26",
     "@types/uuid": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.49.0",
     "eslint": "^8.32.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
     "react-hook-form": "^7.42.1",
