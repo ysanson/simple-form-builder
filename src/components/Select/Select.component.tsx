@@ -51,7 +51,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps & UseFormRegister
     return (
       <>
         <Form.Label htmlFor={id} id={`${id}Label`}>
-          {label}
+          {label} {required && <span className="text-danger">*</span>}
         </Form.Label>
         <Stack direction="horizontal" gap={3}>
           <Form.Select

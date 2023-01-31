@@ -47,82 +47,80 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
       
       case "boolean":
         return (
-          <Row className="mb-3">
-            <Form.Group>
-              <Form.Check
-                label={getLabel(input)}
-                isInvalid={!!errors[input.name]}
-                defaultChecked={input.defaultValue?.toLowerCase() === "true"}
-                {...register(input.name, { required: input.required })}
-              />
-              {getDescription(input.description)}
-              <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
+          <Form.Group>
+            <Form.Check
+              label={<>
+                  {getLabel(input)} {input.required && <span className="text-danger">*</span>}
+                </>}
+              isInvalid={!!errors[input.name]}
+              defaultChecked={input.defaultValue?.toLowerCase() === "true"}
+              {...register(input.name, { required: input.required })}
+            />
+            {getDescription(input.description)}
+            <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
+          </Form.Group>
         );
       case "select":
         return (
-          <Row className="mb-3">
-            <Form.Group>
-              <Select
-                id={`select-${input.id}`}
-                options={getSelectOptions(input)}
-                label={getLabel(input)}
-                isInvalid={!!errors[input.name]}
-                {...register(input.name, { required: input.required })}
-              />
-              {getDescription(input.description)}
-              <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
+          <Form.Group>
+            <Select
+              id={`select-${input.id}`}
+              options={getSelectOptions(input)}
+              label={getLabel(input)}
+              isInvalid={!!errors[input.name]}
+              {...register(input.name, { required: input.required })}
+            />
+            {getDescription(input.description)}
+            <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
+          </Form.Group>
         );
       case "number":
         return (
-          <Row className="mb-3">
-            <Form.Group controlId={`input-${input.id}`}>
-              <Form.Label>{getLabel(input)}</Form.Label>
-              <Form.Control
-                type="number"
-                isInvalid={!!errors[input.name]}
-                defaultValue={input.defaultValue}
-                {...register(input.name, { required: input.required, valueAsNumber: true })}
-              />
-              {getDescription(input.description)}
-              <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
+          <Form.Group controlId={`input-${input.id}`}>
+            <Form.Label>
+              {getLabel(input)} {input.required && <span className="text-danger">*</span>}
+            </Form.Label>
+            <Form.Control
+              type="number"
+              isInvalid={!!errors[input.name]}
+              defaultValue={input.defaultValue}
+              {...register(input.name, { required: input.required, valueAsNumber: true })}
+            />
+            {getDescription(input.description)}
+            <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
+          </Form.Group>
         );
       case "text":
         return (
-          <Row className="mb-3">
-            <Form.Group controlId={`input-${input.id}`}>
-              <Form.Label>{getLabel(input)}</Form.Label>
-              <Form.Control
-                isInvalid={!!errors[input.name]}
-                defaultValue={input.defaultValue}
-                {...register(input.name, { required: input.required })}
-              />
-              {getDescription(input.description)}
-              <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
+          <Form.Group controlId={`input-${input.id}`}>
+            <Form.Label>
+              {getLabel(input)}{input.required && <span className="text-danger">*</span>}
+            </Form.Label>
+            <Form.Control
+              isInvalid={!!errors[input.name]}
+              defaultValue={input.defaultValue}
+              {...register(input.name, { required: input.required })}
+            />
+            {getDescription(input.description)}
+            <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
+          </Form.Group>
         );
       case "textarea":
         return (
-          <Row className="mb-3">
-            <Form.Group controlId={`input-${input.id}`}>
-              <Form.Label>{getLabel(input)}</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                isInvalid={!!errors[input.name]}
-                defaultValue={input.defaultValue}
-                {...register(input.name, { required: input.required })}
-              />
-              {getDescription(input.description)}
-              <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
-            </Form.Group>
-          </Row>
+          <Form.Group controlId={`input-${input.id}`}>
+            <Form.Label>
+              {getLabel(input)}{input.required && <span className="text-danger">*</span>}
+            </Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              isInvalid={!!errors[input.name]}
+              defaultValue={input.defaultValue}
+              {...register(input.name, { required: input.required })}
+            />
+            {getDescription(input.description)}
+            <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
+          </Form.Group>
         );
       default:
         return null;
