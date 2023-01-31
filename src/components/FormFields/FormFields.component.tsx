@@ -43,14 +43,11 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
       case "header":
         return <h3 className="text-center"> {getLabel(input)} </h3>;
       case "subheader":
-        return (
-          <Row key={input.id} className="mb-3">
-            <h5 className="text-center">{getLabel(input)}</h5>
-          </Row>
-        );
+        return <h5 className="text-center">{getLabel(input)}</h5>;
+      
       case "boolean":
         return (
-          <Row key={input.id} className="mb-3">
+          <Row className="mb-3">
             <Form.Group>
               <Form.Check
                 label={getLabel(input)}
@@ -65,7 +62,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
         );
       case "select":
         return (
-          <Row key={input.id} className="mb-3">
+          <Row className="mb-3">
             <Form.Group>
               <Select
                 id={`select-${input.id}`}
@@ -81,7 +78,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
         );
       case "number":
         return (
-          <Row key={input.id} className="mb-3">
+          <Row className="mb-3">
             <Form.Group controlId={`input-${input.id}`}>
               <Form.Label>{getLabel(input)}</Form.Label>
               <Form.Control
@@ -97,7 +94,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
         );
       case "text":
         return (
-          <Row key={input.id} className="mb-3">
+          <Row className="mb-3">
             <Form.Group controlId={`input-${input.id}`}>
               <Form.Label>{getLabel(input)}</Form.Label>
               <Form.Control
@@ -112,7 +109,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
         );
       case "textarea":
         return (
-          <Row key={input.id} className="mb-3">
+          <Row className="mb-3">
             <Form.Group controlId={`input-${input.id}`}>
               <Form.Label>{getLabel(input)}</Form.Label>
               <Form.Control
@@ -128,7 +125,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
           </Row>
         );
       default:
-        return <></>;
+        return null;
       }
     },
     [errors, register]
@@ -141,8 +138,15 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
       if (!setId.has(input.id)) {
         setId.add(input.id);
         const el = createElement(input);
-        if (input.type.includes("header") || !fields[index + 1]) {
+        if (input.type.includes("header") ||(!fields[index + 1] && fields[index + 1].type.includes("header")) ) {
           return <Row key={input.id}>{el}</Row>;
+        } else if (!fields[index + 1]) {
+          return (
+            <Row key={input.id}>
+              <Col md={6}>{el}</Col>
+              <Col md={6}></Col>
+            </Row>
+          );
         } else {
           const secondEl = createElement(fields[index + 1]);
           setId.add(fields[index + 1].id);
@@ -154,7 +158,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
           );
         }
       } else {
-        return <></>;
+        return null;
       }
     });
   };
