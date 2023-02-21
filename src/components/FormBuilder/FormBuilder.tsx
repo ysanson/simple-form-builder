@@ -28,6 +28,8 @@ const defaultValues: EditFormData = {
   maxLength: undefined,
   minLength: undefined,
   required: false,
+  hidden: false,
+  disabled: false,
   name: "",
   type: "",
   defaultValue: "",
@@ -237,15 +239,21 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
                 </Form.Group>
               </Row>
               <Row className="mb-3">
-                <Form.Group>
-                  <Form.Check
-                    disabled={type.includes("header")}
-                    type="switch"
-                    id="check-required"
-                    label="Requis ?"
-                    {...register("required")}
-                  />
-                </Form.Group>
+                  <Col>
+                    <Form.Check
+                      disabled={type.includes("header")}
+                      type="switch"
+                      id="check-required"
+                      label="Required"
+                      {...register("required")}
+                    />
+                  </Col>
+                  <Col>
+                    <Form.Check type="switch" id="check-hidden" label="Hidden" {...register("hidden")} />
+                  </Col>
+                  <Col>
+                    <Form.Check type="switch" id="check-disabled" label="Disabled" {...register("disabled")} />
+                  </Col>
               </Row>
               <Row>
                 <Col>

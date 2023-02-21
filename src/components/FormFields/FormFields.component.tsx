@@ -50,8 +50,8 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
           <Form.Group>
             <Form.Check
               label={<>
-                  {getLabel(input)} {input.required && <span className="text-danger">*</span>}
-                </>}
+                {getLabel(input)} {input.required && <span className="text-danger">*</span>}
+              </>}
               isInvalid={!!errors[input.name]}
               defaultChecked={input.defaultValue?.toLowerCase() === "true"}
               {...register(input.name, { required: input.required })}
@@ -68,6 +68,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
               options={getSelectOptions(input)}
               label={getLabel(input)}
               isInvalid={!!errors[input.name]}
+              disabled={input.disabled}
               {...register(input.name, { required: input.required })}
             />
             {getDescription(input.description)}
@@ -84,6 +85,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
               type="number"
               isInvalid={!!errors[input.name]}
               defaultValue={input.defaultValue}
+              disabled={input.disabled}
               {...register(input.name, { required: input.required, valueAsNumber: true })}
             />
             {getDescription(input.description)}
@@ -99,6 +101,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
             <Form.Control
               isInvalid={!!errors[input.name]}
               defaultValue={input.defaultValue}
+              disabled={input.disabled}
               {...register(input.name, { required: input.required })}
             />
             {getDescription(input.description)}
@@ -116,6 +119,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
               rows={3}
               isInvalid={!!errors[input.name]}
               defaultValue={input.defaultValue}
+              disabled={input.disabled}
               {...register(input.name, { required: input.required })}
             />
             {getDescription(input.description)}
@@ -138,6 +142,8 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
         const el = createElement(input);
         if (input.type.includes("header") ||(!fields[index + 1] && fields[index + 1].type.includes("header")) ) {
           return <Row key={input.id}>{el}</Row>;
+        } else if (input.hidden) {
+          return <Row key={input.id} hidden>{el}</Row>;
         } else if (!fields[index + 1]) {
           return (
             <Row key={input.id}>
