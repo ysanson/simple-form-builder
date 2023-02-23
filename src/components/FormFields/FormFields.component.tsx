@@ -140,10 +140,10 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
       if (!setId.has(input.id)) {
         setId.add(input.id);
         const el = createElement(input);
-        if (input.type.includes("header") ||(!fields[index + 1] && fields[index + 1].type.includes("header")) ) {
-          return <Row key={input.id}>{el}</Row>;
-        } else if (input.hidden) {
+        if (input.hidden) {
           return <Row key={input.id} hidden>{el}</Row>;
+        } else if (input.type.includes("header") ||(!fields[index + 1] && fields[index + 1].type.includes("header")) ) {
+            return <Row key={input.id}>{el}</Row>;
         } else if (!fields[index + 1]) {
           return (
             <Row key={input.id}>
