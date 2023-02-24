@@ -4,6 +4,8 @@ export interface FormInput {
     label?: string;
     type: "" | "text" | "number" | "boolean" | "textarea" | "select" | "header" | "subheader";
     required: boolean;
+    hidden: boolean;
+    disabled: boolean;
     max?: number;
     min?: number;
     maxLength?: number;
