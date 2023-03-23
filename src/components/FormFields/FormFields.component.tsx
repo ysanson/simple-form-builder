@@ -66,6 +66,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
             <Select
               id={`select-${input.id}`}
               options={getSelectOptions(input)}
+              defaultValue={input.defaultValue}
               label={getLabel(input)}
               isInvalid={!!errors[input.name]}
               disabled={input.disabled}

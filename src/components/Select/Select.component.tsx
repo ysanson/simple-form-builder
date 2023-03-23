@@ -29,6 +29,10 @@ interface SelectProps {
      */
     defaultOption?: string;
     /**
+     * The default value. If provided, it must be a value in the options array.
+     */
+    defaultValue?: string;
+    /**
      * The ID of the component.
      */
     id: string;
@@ -47,7 +51,7 @@ interface SelectProps {
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps & UseFormRegisterReturn>(
-  ({ label, options, defaultOption = "Choose...", id, describedBy, name, isInvalid, isLoading = false, onChange, onBlur, required, disabled }, ref) => {
+  ({ label, options, defaultOption = "Choose...", defaultValue, id, describedBy, name, isInvalid, isLoading = false, onChange, onBlur, required, disabled }, ref) => {
     return (
       <>
         <Form.Label htmlFor={id} id={`${id}Label`}>
@@ -62,6 +66,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps & UseFormRegister
             onBlur={onBlur}
             ref={ref}
             isInvalid={isInvalid}
+            defaultValue={defaultValue}
             required={required}
             disabled={disabled}
           >
