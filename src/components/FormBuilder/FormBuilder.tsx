@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -14,10 +14,10 @@ import type { FormInput } from "../../types/FormInput";
  * Types for the edit form. Some fields have to change types in order to be inputable.
  */
 interface EditFormData extends Omit<FormInput, "options"> {
-    /**
-     * Transforms the type of the key Option from string[] to string.
-     */
-    options?: string;
+  /**
+   * Transforms the type of the key Option from string[] to string.
+   */
+  options?: string;
 }
 
 const defaultValues: EditFormData = {
@@ -48,16 +48,16 @@ const fieldTypesOptions: SelectOption[] = [
 ];
 
 interface FormBuilderProps {
-    /**
-     * The form definition, containing a list of form inputs.
-     */
-    formDefinition: FormInput[];
-    /**
-     * Callback to update the form definition.
-     *
-     * @param data The new form definition.
-     */
-    updateFormDefinition: (data: FormInput[]) => void;
+  /**
+   * The form definition, containing a list of form inputs.
+   */
+  formDefinition: FormInput[];
+  /**
+   * Callback to update the form definition.
+   *
+   * @param data The new form definition.
+   */
+  updateFormDefinition: (data: FormInput[]) => void;
 }
 
 /**
@@ -69,7 +69,9 @@ interface FormBuilderProps {
  * @param param0.updateFormDefinition Callback to update the form definition.
  * @returns {React.FC<FormBuilderProps>} The JSX component.
  */
-const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDefinition }) => {
+const FormBuilder: React.FC<FormBuilderProps> = (
+  { formDefinition, updateFormDefinition },
+) => {
   const [editFormData, setEditFormData] = useState<EditFormData | undefined>();
   const {
     register,
@@ -83,10 +85,10 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
   const type = watch("type");
 
   /**
-     * Handler for a successful edit form validation.
-     *
-     * @param data The data returned by the form validation
-     */
+   * Handler for a successful edit form validation.
+   *
+   * @param data The data returned by the form validation
+   */
   const onSubmit: SubmitHandler<EditFormData> = (data) => {
     // Transform some data to conform to FormInput.
     if (data.label === "") {
@@ -117,9 +119,9 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
   };
 
   /**
-     * UseEffect to populate the edit form if a field has been selected.
-     * If the field has been deselected, resets the form to the default values.
-     */
+   * UseEffect to populate the edit form if a field has been selected.
+   * If the field has been deselected, resets the form to the default values.
+   */
   useEffect(() => {
     if (editFormData) {
       reset(editFormData);
@@ -130,14 +132,16 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
   }, [editFormData, reset, setValue]);
 
   /**
-     * Validates that the input name is unique, so as to not override an existing field.
-     * Callback to not have it reload every time for performance reasons.
-     */
+   * Validates that the input name is unique, so as to not override an existing field.
+   * Callback to not have it reload every time for performance reasons.
+   */
   const validateInputName = useCallback(
     (inputName: string) => {
-      return editId === "" ? !formDefinition.some((input) => input.name === inputName) : true;
+      return editId === ""
+        ? !formDefinition.some((input) => input.name === inputName)
+        : true;
     },
-    [editId, formDefinition]
+    [editId, formDefinition],
   );
 
   const body = (
@@ -150,7 +154,13 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
             setEditFormData={(item) => {
               if (item) {
                 const editItem: any = item;
-                editItem.options = item.options?.join(";");
+                if (item.options) {
+                  if (Array.isArray(item.options)) {
+                    editItem.options = item.options?.join(";");
+                  } else {
+                    editItem.options = item.options;
+                  }
+                }
                 setEditFormData(editItem as EditFormData);
               } else {
                 setEditFormData(undefined);
@@ -179,12 +189,19 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
                     isInvalid={!!errors.name}
                     defaultValue={editFormData?.name}
                     disabled={editId !== ""}
-                    {...register("name", { required: true, validate: { validateInputName } })}
+                    {...register("name", {
+                      required: true,
+                      validate: { validateInputName },
+                    })}
                   />
-                  <Form.Text>The field name, which will be sent in the response data.</Form.Text>
+                  <Form.Text>
+                    The field name, which will be sent in the response data.
+                  </Form.Text>
                   <Form.Control.Feedback type="invalid">
-                    {errors.name?.type === "validateInputName" && "This name is already in use."}
-                    {errors.name?.type === "required" && "This field is required."}
+                    {errors.name?.type === "validateInputName" &&
+                      "This name is already in use."}
+                    {errors.name?.type === "required" &&
+                      "This field is required."}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Row>
@@ -197,7 +214,9 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
                     options={fieldTypesOptions}
                     {...register("type", { required: true })}
                   />
-                  <Form.Control.Feedback type="invalid">This field is required.</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    This field is required.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Row>
               <Row className="mb-3">
@@ -210,7 +229,11 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
               <Row className="mb-3">
                 <Form.Group controlId="field-default-value">
                   <Form.Label>Default value</Form.Label>
-                  <Form.Control disabled={type.includes("header")} defaultValue={editFormData?.defaultValue} {...register("defaultValue")} />
+                  <Form.Control
+                    disabled={type.includes("header")}
+                    defaultValue={editFormData?.defaultValue}
+                    {...register("defaultValue")}
+                  />
                 </Form.Group>
               </Row>
               {type === "select" && (
@@ -239,26 +262,36 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
                 </Form.Group>
               </Row>
               <Row className="mb-3">
-                  <Col>
-                    <Form.Check
-                      disabled={type.includes("header")}
-                      type="switch"
-                      id="check-required"
-                      label="Required"
-                      {...register("required")}
-                    />
-                  </Col>
-                  <Col>
-                    <Form.Check type="switch" id="check-hidden" label="Hidden" {...register("hidden")} />
-                  </Col>
-                  <Col>
-                    <Form.Check type="switch" id="check-disabled" label="Disabled" {...register("disabled")} />
-                  </Col>
+                <Col>
+                  <Form.Check
+                    disabled={type.includes("header")}
+                    type="switch"
+                    id="check-required"
+                    label="Required"
+                    {...register("required")}
+                  />
+                </Col>
+                <Col>
+                  <Form.Check
+                    type="switch"
+                    id="check-hidden"
+                    label="Hidden"
+                    {...register("hidden")}
+                  />
+                </Col>
+                <Col>
+                  <Form.Check
+                    type="switch"
+                    id="check-disabled"
+                    label="Disabled"
+                    {...register("disabled")}
+                  />
+                </Col>
               </Row>
               <Row>
                 <Col>
                   <Button variant="outline-success" type="submit">
-                                       Save 
+                    Save
                   </Button>
                 </Col>
               </Row>
@@ -273,4 +306,3 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formDefinition, updateFormDef
 };
 
 export default FormBuilder;
-
