@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -10,17 +10,7 @@ import Button from "react-bootstrap/Button";
 import { v4 } from "uuid";
 import type { FormInput } from "../../types/FormInput";
 
-/**
- * Types for the edit form. Some fields have to change types in order to be inputable.
- */
-interface EditFormData extends Omit<FormInput, "options"> {
-  /**
-   * Transforms the type of the key Option from string[] to string.
-   */
-  options?: string;
-}
-
-const defaultValues: EditFormData = {
+const defaultValues: FormInput = {
   id: "",
   max: undefined,
   min: undefined,
@@ -35,6 +25,7 @@ const defaultValues: EditFormData = {
   defaultValue: "",
   description: "",
   label: "",
+  options: [],
 };
 
 const fieldTypesOptions: SelectOption[] = [
@@ -72,7 +63,7 @@ interface FormBuilderProps {
 const FormBuilder: React.FC<FormBuilderProps> = (
   { formDefinition, updateFormDefinition },
 ) => {
-  const [editFormData, setEditFormData] = useState<EditFormData | undefined>();
+  const [editFormData, setEditFormData] = useState<FormInput | undefined>();
   const {
     register,
     handleSubmit,
@@ -80,7 +71,9 @@ const FormBuilder: React.FC<FormBuilderProps> = (
     setValue,
     watch,
     reset,
-  } = useForm<EditFormData>({ defaultValues });
+    control,
+  } = useForm<FormInput>({ defaultValues });
+  const {fields, append, swap, remove} = useFieldArray({control, name: "options"});
   const [editId, setEditId] = useState("");
   const type = watch("type");
 
@@ -89,13 +82,13 @@ const FormBuilder: React.FC<FormBuilderProps> = (
    *
    * @param data The data returned by the form validation
    */
-  const onSubmit: SubmitHandler<EditFormData> = (data) => {
+  const onSubmit: SubmitHandler<FormInput> = (data) => {
     // Transform some data to conform to FormInput.
     if (data.label === "") {
       data.label = undefined;
     }
-    const newItem = data as FormInput;
-    newItem.options = data.options?.split(";").map((opt) => opt.trim());
+    const newItem = data;
+    newItem.options = data.options?.map(opt => ({label: opt.value, value: opt.value}));
 
     //If we edit, => update input
     // If edit index === -1 => append
@@ -151,21 +144,7 @@ const FormBuilder: React.FC<FormBuilderProps> = (
           <SortableContainer
             editId={editId}
             setEditId={setEditId}
-            setEditFormData={(item) => {
-              if (item) {
-                const editItem: any = item;
-                if (item.options) {
-                  if (Array.isArray(item.options)) {
-                    editItem.options = item.options?.join(";");
-                  } else {
-                    editItem.options = item.options;
-                  }
-                }
-                setEditFormData(editItem as EditFormData);
-              } else {
-                setEditFormData(undefined);
-              }
-            }}
+            setEditFormData={(item) => setEditFormData(item)}
             reset={reset}
             updateFormDefinition={(data) => {
               setEditFormData(undefined);

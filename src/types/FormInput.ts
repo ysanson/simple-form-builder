@@ -1,3 +1,5 @@
+import SelectOption from "./SelectOption";
+
 export interface FormInput {
     id: string;
     name: string;
@@ -13,6 +15,6 @@ export interface FormInput {
     pattern?: string;
     description?: string;
     defaultValue?: string;
-    options?: string[];
+    options?: SelectOption[];
 }
 
