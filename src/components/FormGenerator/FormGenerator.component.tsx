@@ -34,6 +34,10 @@ interface FormGeneratorProps {
      */
     isLoading?: boolean;
     /**
+     * A prop to send custom reset values to the form.
+     */
+    resetValues?: FieldValues; 
+    /**
      * Callback when the validation is successful.
      *
      * @param responses The responses to the form. Object containing key-value pairs, the keys being the input name.
@@ -54,6 +58,7 @@ const FormGenerator: React.FC<FormGeneratorProps> = ({
   submitBtnLabel,
   resetBtnLabel,
   isLoading,
+  resetValues,
   onSubmitError,
   onSubmitSuccess,
 }) => {
@@ -65,8 +70,8 @@ const FormGenerator: React.FC<FormGeneratorProps> = ({
   } = useForm();
 
   /**
-     * UseEffect for external submit
-     */
+   * UseEffect for external submit
+   */
   useEffect(() => {
     if (triggerSubmit) {
       handleSubmit(
@@ -77,6 +82,12 @@ const FormGenerator: React.FC<FormGeneratorProps> = ({
       )();
     }
   },[handleSubmit, onSubmitError, onSubmitSuccess, triggerSubmit]);
+
+  useEffect(() => {
+    if (resetValues) {
+      reset(resetValues);
+    }
+  })
 
   return (
     <Container>
