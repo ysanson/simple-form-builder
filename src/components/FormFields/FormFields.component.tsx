@@ -3,24 +3,18 @@ import { UseFormRegister } from "react-hook-form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import Select, { SelectOption } from "../Select";
+import Select from "../Select";
 import type { FormInput } from "../../types/FormInput";
 
 interface FormFieldsProps {
-    fields: FormInput[];
-    errors: any;
-    register: UseFormRegister<any>;
+  fields: FormInput[];
+  errors: any;
+  register: UseFormRegister<any>;
 }
 
-const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => {
-  const getSelectOptions = (input: FormInput): SelectOption[] => {
-    if (input.options) {
-      return input.options.map((opt) => ({ label: opt, value: opt }));
-    } else {
-      return [];
-    }
-  };
-
+const FormFields: React.FC<FormFieldsProps> = (
+  { fields, errors, register },
+) => {
   const getLabel = (input: FormInput): string => {
     if (input.label && input.label !== "") {
       return input.label;
@@ -41,23 +35,28 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
     (input: FormInput) => {
       switch (input.type) {
       case "header":
-        return <h3 className="text-center"> {getLabel(input)} </h3>;
+        return <h3 className="text-center">{getLabel(input)}</h3>;
       case "subheader":
         return <h5 className="text-center">{getLabel(input)}</h5>;
-      
+
       case "boolean":
         return (
           <Form.Group>
             <Form.Check
-              label={<>
-                {getLabel(input)} {input.required && <span className="text-danger">*</span>}
-              </>}
+              label={
+                <>
+                  {getLabel(input)}{" "}
+                  {input.required && <span className="text-danger">*</span>}
+                </>
+              }
               isInvalid={!!errors[input.name]}
               defaultChecked={input.defaultValue?.toLowerCase() === "true"}
               {...register(input.name, { required: input.required })}
             />
             {getDescription(input.description)}
-            <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+                Ce champ est requis.
+            </Form.Control.Feedback>
           </Form.Group>
         );
       case "select":
@@ -65,7 +64,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
           <Form.Group>
             <Select
               id={`select-${input.id}`}
-              options={getSelectOptions(input)}
+              options={input.options ?? []}
               defaultValue={input.defaultValue}
               label={getLabel(input)}
               isInvalid={!!errors[input.name]}
@@ -73,31 +72,40 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
               {...register(input.name, { required: input.required })}
             />
             {getDescription(input.description)}
-            <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+                Ce champ est requis.
+            </Form.Control.Feedback>
           </Form.Group>
         );
       case "number":
         return (
           <Form.Group controlId={`input-${input.id}`}>
             <Form.Label>
-              {getLabel(input)} {input.required && <span className="text-danger">*</span>}
+              {getLabel(input)}{" "}
+              {input.required && <span className="text-danger">*</span>}
             </Form.Label>
             <Form.Control
               type="number"
               isInvalid={!!errors[input.name]}
               defaultValue={input.defaultValue}
               disabled={input.disabled}
-              {...register(input.name, { required: input.required, valueAsNumber: true })}
+              {...register(input.name, {
+                required: input.required,
+                valueAsNumber: true,
+              })}
             />
             {getDescription(input.description)}
-            <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+                Ce champ est requis.
+            </Form.Control.Feedback>
           </Form.Group>
         );
       case "text":
         return (
           <Form.Group controlId={`input-${input.id}`}>
             <Form.Label>
-              {getLabel(input)}{input.required && <span className="text-danger">*</span>}
+              {getLabel(input)}
+              {input.required && <span className="text-danger">*</span>}
             </Form.Label>
             <Form.Control
               isInvalid={!!errors[input.name]}
@@ -106,14 +114,17 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
               {...register(input.name, { required: input.required })}
             />
             {getDescription(input.description)}
-            <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+                Ce champ est requis.
+            </Form.Control.Feedback>
           </Form.Group>
         );
       case "textarea":
         return (
           <Form.Group controlId={`input-${input.id}`}>
             <Form.Label>
-              {getLabel(input)}{input.required && <span className="text-danger">*</span>}
+              {getLabel(input)}
+              {input.required && <span className="text-danger">*</span>}
             </Form.Label>
             <Form.Control
               as="textarea"
@@ -124,14 +135,16 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
               {...register(input.name, { required: input.required })}
             />
             {getDescription(input.description)}
-            <Form.Control.Feedback type="invalid">Ce champ est requis.</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+                Ce champ est requis.
+            </Form.Control.Feedback>
           </Form.Group>
         );
       default:
         return null;
       }
     },
-    [errors, register]
+    [errors, register],
   );
 
   const createFields = () => {
@@ -143,8 +156,11 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
         const el = createElement(input);
         if (input.hidden) {
           return <Row key={input.id} hidden>{el}</Row>;
-        } else if (input.type.includes("header") ||(!fields[index + 1] && fields[index + 1].type.includes("header")) ) {
-            return <Row key={input.id}>{el}</Row>;
+        } else if (
+          input.type.includes("header") ||
+          (!fields[index + 1] && fields[index + 1].type.includes("header"))
+        ) {
+          return <Row key={input.id}>{el}</Row>;
         } else if (!fields[index + 1]) {
           return (
             <Row key={input.id}>
@@ -168,8 +184,7 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, errors, register }) => 
     });
   };
 
-  return <> {createFields()} </>;
+  return <>{createFields()}</>;
 };
 
 export default FormFields;
-

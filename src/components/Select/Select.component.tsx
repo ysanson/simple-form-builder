@@ -3,17 +3,7 @@ import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import Spinner from "react-bootstrap/Spinner";
 import type { UseFormRegisterReturn } from "react-hook-form";
-
-export interface SelectOption {
-    /**
-     * Value of the option.
-     */
-    value: string;
-    /**
-     * Label to show for this option.
-     */
-    label: string;
-}
+import type SelectOption from "../../types/SelectOption";
 
 interface SelectProps {
     /**

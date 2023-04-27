@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -7,20 +7,12 @@ import SortableContainer from "../SortableContainer";
 import Form from "react-bootstrap/Form";
 import Select, { SelectOption } from "../Select";
 import Button from "react-bootstrap/Button";
+import Collapse from "react-bootstrap/Collapse";
+import InputGroup from "react-bootstrap/InputGroup";
 import { v4 } from "uuid";
 import type { FormInput } from "../../types/FormInput";
 
-/**
- * Types for the edit form. Some fields have to change types in order to be inputable.
- */
-interface EditFormData extends Omit<FormInput, "options"> {
-  /**
-   * Transforms the type of the key Option from string[] to string.
-   */
-  options?: string;
-}
-
-const defaultValues: EditFormData = {
+const defaultValues: FormInput = {
   id: "",
   max: undefined,
   min: undefined,
@@ -35,6 +27,7 @@ const defaultValues: EditFormData = {
   defaultValue: "",
   description: "",
   label: "",
+  options: [],
 };
 
 const fieldTypesOptions: SelectOption[] = [
@@ -72,7 +65,7 @@ interface FormBuilderProps {
 const FormBuilder: React.FC<FormBuilderProps> = (
   { formDefinition, updateFormDefinition },
 ) => {
-  const [editFormData, setEditFormData] = useState<EditFormData | undefined>();
+  const [editFormData, setEditFormData] = useState<FormInput | undefined>();
   const {
     register,
     handleSubmit,
@@ -80,8 +73,14 @@ const FormBuilder: React.FC<FormBuilderProps> = (
     setValue,
     watch,
     reset,
-  } = useForm<EditFormData>({ defaultValues });
+    control,
+  } = useForm<FormInput>({ defaultValues });
+  const { fields, append, swap, remove } = useFieldArray({
+    control,
+    name: "options",
+  });
   const [editId, setEditId] = useState("");
+  const [showOptions, setShowOptions] = useState(false);
   const type = watch("type");
 
   /**
@@ -89,13 +88,16 @@ const FormBuilder: React.FC<FormBuilderProps> = (
    *
    * @param data The data returned by the form validation
    */
-  const onSubmit: SubmitHandler<EditFormData> = (data) => {
+  const onSubmit: SubmitHandler<FormInput> = (data) => {
     // Transform some data to conform to FormInput.
     if (data.label === "") {
       data.label = undefined;
     }
-    const newItem = data as FormInput;
-    newItem.options = data.options?.split(";").map((opt) => opt.trim());
+    const newItem = data;
+    newItem.options = data.options?.map((opt) => ({
+      label: opt.value,
+      value: opt.value,
+    }));
 
     //If we edit, => update input
     // If edit index === -1 => append
@@ -151,21 +153,7 @@ const FormBuilder: React.FC<FormBuilderProps> = (
           <SortableContainer
             editId={editId}
             setEditId={setEditId}
-            setEditFormData={(item) => {
-              if (item) {
-                const editItem: any = item;
-                if (item.options) {
-                  if (Array.isArray(item.options)) {
-                    editItem.options = item.options?.join(";");
-                  } else {
-                    editItem.options = item.options;
-                  }
-                }
-                setEditFormData(editItem as EditFormData);
-              } else {
-                setEditFormData(undefined);
-              }
-            }}
+            setEditFormData={(item) => setEditFormData(item)}
             reset={reset}
             updateFormDefinition={(data) => {
               setEditFormData(undefined);
@@ -237,17 +225,72 @@ const FormBuilder: React.FC<FormBuilderProps> = (
                 </Form.Group>
               </Row>
               {type === "select" && (
-                <Row className="mb-3">
-                  <Form.Group controlId="field-options">
-                    <Form.Label>Select options</Form.Label>
-                    <Form.Control
-                      defaultValue={editFormData?.options}
-                      isInvalid={!!errors.options}
-                      {...register("options", { required: type === "select" })}
-                    />
-                    <Form.Text>Separate values with ;</Form.Text>
-                  </Form.Group>
-                </Row>
+                <>
+                  <Row className="mb-1">
+                    <Col md="auto">
+                      <Button
+                        onClick={() => setShowOptions(!showOptions)}
+                        variant="outline-primary"
+                        size="sm"
+                        active={showOptions}
+                      >
+                        {showOptions ? "Hide options" : "Show options"}
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Collapse in={showOptions}>
+                    <div id="collapse-options">
+                      <Row className="mb-1">
+                        {fields.map((input, index) => {
+                          return (
+                            <Row className="mb-1" key={input.id}>
+                              <InputGroup>
+                                <Form.Control
+                                  placeholder={`Option ${index + 1}`}
+                                  aria-label="option"
+                                  defaultValue={input.value}
+                                  {...register(`options.${index}.value`, {
+                                    required: true,
+                                  })}
+                                />
+                                <Button
+                                  variant="outline-secondary"
+                                  disabled={index === 0}
+                                  onClick={() => swap(index, index - 1)}
+                                >
+                                  🔼
+                                </Button>
+                                <Button
+                                  variant="outline-secondary"
+                                  disabled={index === fields.length - 1}
+                                  onClick={() => swap(index, index - 1)}
+                                >
+                                  🔽
+                                </Button>
+                                <Button
+                                  variant="outline-danger"
+                                  onClick={() => remove(index)}
+                                >
+                                  🗑️
+                                </Button>
+                              </InputGroup>
+                            </Row>
+                          );
+                        })}
+                      </Row>
+                      <Row className="mb-3">
+                        <Col md="auto">
+                          <Button
+                            variant="outline-secondary"
+                            onClick={() => append({ value: "", label: "" })}
+                          >
+                            ➕
+                          </Button>
+                        </Col>
+                      </Row>
+                    </div>
+                  </Collapse>
+                </>
               )}
               <Row className="mb-3">
                 <Form.Group controlId="field-description">
