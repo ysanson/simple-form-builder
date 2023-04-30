@@ -146,6 +146,20 @@ const FormBuilder: React.FC<FormBuilderProps> = (
     [editId, formDefinition],
   );
 
+  /**
+   * Validates that the form has only one title.
+   */
+  const isTitleUnique = useCallback(
+    (type: string, formValues: FormInput) => {
+      if (type !== "header") return true;
+      else {
+        const existingTitle = formDefinition.find(input => input.type === "header");
+        return existingTitle ? existingTitle.id === formValues.id : true;
+      }
+    },
+    [formDefinition],
+  )
+
   const body = (
     <Container fluid>
       <Row>
@@ -200,11 +214,14 @@ const FormBuilder: React.FC<FormBuilderProps> = (
                     id="field-type"
                     isInvalid={!!errors.type}
                     options={fieldTypesOptions}
-                    {...register("type", { required: true })}
+                    {...register("type", { required: true, validate: { isTitleUnique } })}
                   />
-                  <Form.Control.Feedback type="invalid">
-                    This field is required.
-                  </Form.Control.Feedback>
+                  {errors.type && (
+                    <span className="text-danger">
+                      {errors.type.type === "required" && "This field is required."}
+                      {errors.type.type === "isTitleUnique" && "Only one title per form."}
+                    </span>)
+                  }
                 </Form.Group>
               </Row>
               <Row className="mb-3">
