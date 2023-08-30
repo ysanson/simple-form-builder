@@ -78,7 +78,7 @@ const FormGenerator: React.FC<FormGeneratorProps> = ({
         case "subheader":
           return ["", ""];
         case "boolean":
-          return [input.name, input.defaultValue === "true"];
+          return [input.name, input.defaultValue?.toLowerCase() === "true"];
         default:
           return [input.name, input.defaultValue ?? ""];
         }
@@ -137,7 +137,7 @@ const FormGenerator: React.FC<FormGeneratorProps> = ({
                     &nbsp;&nbsp;
                   </>
                 )}
-                {submitBtnLabel ?? "Envoyer"}
+                {submitBtnLabel ?? "Submit"}
               </Button>
             )}
           </div>
