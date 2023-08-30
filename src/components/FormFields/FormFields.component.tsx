@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { UseFormRegister } from "react-hook-form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -10,11 +10,20 @@ interface FormFieldsProps {
   fields: FormInput[];
   errors: any;
   register: UseFormRegister<any>;
+  onFieldsGenerated: () => void;
 }
 
 const FormFields: React.FC<FormFieldsProps> = (
-  { fields, errors, register },
+  { fields, errors, register, onFieldsGenerated },
 ) => {
+
+  /**
+   * Callback when the fields have been drawn on screen and the component mounted.
+   */
+  useEffect(() => {
+    onFieldsGenerated();
+  });
+
   const getLabel = (input: FormInput): string => {
     if (input.label && input.label !== "") {
       return input.label;
@@ -50,12 +59,11 @@ const FormFields: React.FC<FormFieldsProps> = (
                 </>
               }
               isInvalid={!!errors[input.name]}
-              defaultChecked={input.defaultValue?.toLowerCase() === "true"}
               {...register(input.name, { required: input.required })}
             />
             {getDescription(input.description)}
             <Form.Control.Feedback type="invalid">
-                Ce champ est requis.
+                This field is required.
             </Form.Control.Feedback>
           </Form.Group>
         );
@@ -65,7 +73,6 @@ const FormFields: React.FC<FormFieldsProps> = (
             <Select
               id={`select-${input.id}`}
               options={input.options ?? []}
-              defaultValue={input.defaultValue}
               label={getLabel(input)}
               isInvalid={!!errors[input.name]}
               disabled={input.disabled}
@@ -73,7 +80,7 @@ const FormFields: React.FC<FormFieldsProps> = (
             />
             {getDescription(input.description)}
             <Form.Control.Feedback type="invalid">
-                Ce champ est requis.
+                This field is required.
             </Form.Control.Feedback>
           </Form.Group>
         );
@@ -87,7 +94,6 @@ const FormFields: React.FC<FormFieldsProps> = (
             <Form.Control
               type="number"
               isInvalid={!!errors[input.name]}
-              defaultValue={input.defaultValue}
               disabled={input.disabled}
               {...register(input.name, {
                 required: input.required,
@@ -96,7 +102,7 @@ const FormFields: React.FC<FormFieldsProps> = (
             />
             {getDescription(input.description)}
             <Form.Control.Feedback type="invalid">
-                Ce champ est requis.
+                This field is required.
             </Form.Control.Feedback>
           </Form.Group>
         );
@@ -109,13 +115,12 @@ const FormFields: React.FC<FormFieldsProps> = (
             </Form.Label>
             <Form.Control
               isInvalid={!!errors[input.name]}
-              defaultValue={input.defaultValue}
               disabled={input.disabled}
               {...register(input.name, { required: input.required })}
             />
             {getDescription(input.description)}
             <Form.Control.Feedback type="invalid">
-                Ce champ est requis.
+                This field is required.
             </Form.Control.Feedback>
           </Form.Group>
         );
@@ -130,13 +135,12 @@ const FormFields: React.FC<FormFieldsProps> = (
               as="textarea"
               rows={3}
               isInvalid={!!errors[input.name]}
-              defaultValue={input.defaultValue}
               disabled={input.disabled}
               {...register(input.name, { required: input.required })}
             />
             {getDescription(input.description)}
             <Form.Control.Feedback type="invalid">
-                Ce champ est requis.
+                This field is required.
             </Form.Control.Feedback>
           </Form.Group>
         );
