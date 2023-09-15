@@ -48,7 +48,9 @@ interface FormGeneratorProps {
    *
    * @param errors The validation errors in the fields.
    */
-  onSubmitError?: (errors: Partial<FieldErrorsImpl<{ [x: string]: any }>>) => void;
+  onSubmitError?: (
+    errors: Partial<FieldErrorsImpl<{ [x: string]: any }>>,
+  ) => void;
 }
 
 const FormGenerator: React.FC<FormGeneratorProps> = ({
@@ -74,18 +76,25 @@ const FormGenerator: React.FC<FormGeneratorProps> = ({
     return formDefinition
       .map((input): [string, string | boolean] => {
         switch (input.type) {
-        case "header":
-        case "subheader":
-          return ["", ""];
-        case "boolean":
-          return [input.name, input.defaultValue?.toLowerCase() === "true"];
-        default:
-          return [input.name, input.defaultValue ?? ""];
+          case "header":
+          case "subheader":
+            return ["", ""];
+          case "boolean":
+            return [input.name, input.defaultValue?.toLowerCase() === "true"];
+          default:
+            return [input.name, input.defaultValue ?? ""];
         }
       })
       .filter(([name]) => name !== "")
       .reduce((acc: FieldValues, [name, value]) => {
-        acc[name] = value;
+        if (/^.*\.[0-9]*\..*/.test(name)) {
+          const [parent, index, child] = name.split(".");
+          acc[parent] = acc[parent] ?? [];
+          acc[parent][index] = acc[parent][index] ?? {};
+          acc[parent][index][child] = value;
+        } else {
+          acc[name] = value;
+        }
         return acc;
       }, {});
   }, [formDefinition]);
@@ -99,7 +108,7 @@ const FormGenerator: React.FC<FormGeneratorProps> = ({
         (data) => onSubmitSuccess(data),
         (errs) => {
           if (onSubmitError) onSubmitError(errs);
-        }
+        },
       )();
     }
   }, [handleSubmit, onSubmitError, onSubmitSuccess, triggerSubmit]);
@@ -118,11 +127,16 @@ const FormGenerator: React.FC<FormGeneratorProps> = ({
           (data) => onSubmitSuccess(data),
           (errs) => {
             if (onSubmitError) onSubmitError(errs);
-          }
+          },
         )}
       >
         <Row>
-          <FormFields fields={formDefinition} register={register} errors={errors} onFieldsGenerated={() => setGenerated(true)} />
+          <FormFields
+            fields={formDefinition}
+            register={register}
+            errors={errors}
+            onFieldsGenerated={() => setGenerated(true)}
+          />
         </Row>
         <Row>
           <div className="d-flex justify-content-around">
@@ -133,7 +147,13 @@ const FormGenerator: React.FC<FormGeneratorProps> = ({
               <Button type="submit" variant="success" disabled={isLoading}>
                 {isLoading && (
                   <>
-                    <Spinner as="span" size="sm" animation="border" role="status" aria-hidden />
+                    <Spinner
+                      as="span"
+                      size="sm"
+                      animation="border"
+                      role="status"
+                      aria-hidden
+                    />
                     &nbsp;&nbsp;
                   </>
                 )}
@@ -148,4 +168,3 @@ const FormGenerator: React.FC<FormGeneratorProps> = ({
 };
 
 export default FormGenerator;
-

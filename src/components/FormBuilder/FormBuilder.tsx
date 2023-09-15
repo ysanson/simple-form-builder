@@ -179,6 +179,7 @@ const FormBuilder: React.FC<FormBuilderProps> = (
                     disabled={editId !== ""}
                     {...register("name", {
                       required: true,
+                      pattern: /^(?!.*\[[0-9]*\].*)/,
                       validate: { validateInputName },
                     })}
                   />
@@ -190,6 +191,8 @@ const FormBuilder: React.FC<FormBuilderProps> = (
                       "This name is already in use."}
                     {errors.name?.type === "required" &&
                       "This field is required."}
+                    {errors.name?.type === "pattern" &&
+                      "Array of inputs must be written with dots (eg. input.0.property)."}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Row>
